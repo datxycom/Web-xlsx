@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-    <title>DatXY</title>
-    <link rel="shortcut icon" href="https://github.githubassets.com/favicons/favicon.svg">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <style>
+ <head> 
+  <meta charset="utf-8" /> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, viewport-fit=cover" /> 
+  <title>DatXY</title> 
+  <link rel="shortcut icon" href="https://github.githubassets.com/favicons/favicon.svg" /> 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" /> 
+  <style>
         .container {
             max-width: 100%;
             margin: 0 auto;
@@ -88,8 +87,17 @@
             }
     
         }
-    </style>
-    <script>
+
+        /* Hide specific buttons on mobile */
+/* 在手机上确保显示这两个按钮 */
+@media screen and (max-width: 767px) {
+    .add-row-btn, .download-page-btn {
+        display: inline-block; /* 确保按钮显示为内联块元素 */
+    }
+}
+
+    </style> 
+  <script>
         function sortDefault() {
             sortTable(4);
         }
@@ -386,55 +394,54 @@ function updateLink(row, cellIndex) {
 
 
 
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
+    </script> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script> 
+ </head> 
+ <body onload="sortDefault()"> 
+  <div class="container"> 
+   <div class="input-container"> 
+    <input type="text" id="filterInput" onkeyup="filterTable()" placeholder="Search for Data.." /> 
+    <button class="clear-btn" onclick="clearInput()">✕</button> 
+    <button class="btn" onclick="startSpeechRecognition()"><i class="fas fa-microphone icon"></i></button> 
+    <button class="btn" onclick="window.open('https://github.com/feeday/feeday.github.io/issues/4', '_blank')"><i class="fas fa-info-circle icon"></i></button> 
+    <button class="btn" onclick="window.open('https://github.com/feeday/DatXY')"><i class="fas fa-cog"></i></button> 
+    <button class="btn add-row-btn" onclick="addRow()"><i class="fas fa-plus icon"></i></button>
+<button class="btn download-page-btn" onclick="downloadPage()"><i class="fas fa-download icon"></i></button>
+<button class="btn" onclick="downloadXLSX()"><i class="fas fa-file-excel icon"></i></button> 
 
-</head>
-<body onload="sortDefault()">
-    <div class="container">
-        <div class="input-container">
-            <input type="text" id="filterInput" onkeyup="filterTable()" placeholder="Search for Data..">
-            <button class="clear-btn" onclick="clearInput()">✕</button>
-            <button class="btn" onclick="startSpeechRecognition()"><i class="fas fa-microphone icon"></i></button>
-            <button class="btn" onclick="window.open('https://github.com/feeday/feeday.github.io/issues/4', '_blank')"><i class="fas fa-info-circle icon"></i></button>
-            <button class="btn" onclick="window.open('https://github.com/feeday/DatXY')"><i class="fas fa-cog"></i></button>
-            <button class="btn" onclick="addRow()"><i class="fas fa-plus icon"></i></button>
-            
-            <button class="btn" onclick="downloadPage()"><i class="fas fa-download icon"></i></button>
-            <button class="btn" onclick="downloadXLSX()"><i class="fas fa-file-excel icon"></i></button>
-        </div>
-
-        <table id="myTable">
-            <tr>
-                <th onclick="sortTable(0)">Name</th>
-                <th onclick="sortTable(1)">Year</th>
-                <th onclick="sortTable(2)">Data type</th>
-                <th onclick="sortTable(3)">Hyperlink</th>
-                <th>Action</th>
-            </tr>
-            <tr>
-                <td><a target="_blank" href="https://github.com/deepseek-ai/DeepSeek-R1">DeepSeek-R1</a></td>
-                <td>20250120</td>
-                <td>Code-LLM</td>
-                <td><a target="_blank" href="https://github.com/deepseek-ai/DeepSeek-R1">https://github.com</a></td>
-                <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
-            </tr>
-        </table>
-    </div>
-    <div style="text-align:center;height:10px;">
-</div>
-
-  	<div style="display: flex; justify-content: center; align-items: center;">
-         <script>
+   </div> 
+   <table id="myTable"> 
+    <tbody>
+     <tr> 
+      <th onclick="sortTable(0)">Name</th> 
+      <th onclick="sortTable(1)">Year</th> 
+      <th onclick="sortTable(2)">Data type</th> 
+      <th onclick="sortTable(3)">Hyperlink</th> 
+      <th>Action</th> 
+     </tr> 
+     <tr> 
+      <td><a target="_blank" href="https://github.com/deepseek-ai/DeepSeek-R1">DeepSeek-R1</a></td> 
+      <td>20250120</td> 
+      <td>Code-LLM</td> 
+      <td><a target="_blank" href="https://github.com/deepseek-ai/DeepSeek-R1">https://github.com/deepseek-ai/DeepSeek-R1</a></td> 
+      <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td> 
+     </tr> 
+    </tbody>
+   </table> 
+  </div> 
+  <div style="text-align:center;height:10px;"> 
+  </div> 
+  <div style="display: flex; justify-content: center; align-items: center;"> 
+   <script>
         window.addEventListener('load', function() {
             // 计算页面加载完成时间
             const loadTime = performance.now();
             // 显示加载时间
             document.getElementById('performance-result').textContent = `页面加载: ${loadTime.toFixed(2)} ms`;
         });
-    </script>
-<span id="delay" style="box-sizing: border-box; margin: 0; padding: 5px 10px; font-size: 12px; line-height: 1.71428em; color: #999; display: inline-block; text-align: center; border: 1px solid #ccc; border-left: none;"><script id="LA-DATA-WIDGET" crossorigin="anonymous" charset="UTF-8" src="https://v6-widget.51.la/v6/JRHGRBPWC7lJIaXq/quote.js?theme=0&f=12&display=0,0,1,1,0,0,0,0"></script></span>
-<span id="performance-result" style="box-sizing: border-box; margin: 0; padding: 5px 10px; font-size: 12px; line-height: 1.71428em; color: #999; display: inline-block; text-align: center; border: 1px solid #ccc; border-right: none;">页面加载完成时间: -- ms</span>
-</div>
-</body>
+    </script> 
+   <span id="delay" style="box-sizing: border-box; margin: 0; padding: 5px 10px; font-size: 12px; line-height: 1.71428em; color: #999; display: inline-block; text-align: center; border: 1px solid #ccc; border-left: none;"><script id="LA-DATA-WIDGET" crossorigin="anonymous" charset="UTF-8" src="https://v6-widget.51.la/v6/JRHGRBPWC7lJIaXq/quote.js?theme=0&amp;f=12&amp;display=0,0,1,1,0,0,0,0"></script></span> 
+   <span id="performance-result" style="box-sizing: border-box; margin: 0; padding: 5px 10px; font-size: 12px; line-height: 1.71428em; color: #999; display: inline-block; text-align: center; border: 1px solid #ccc; border-right: none;">页面加载完成时间: -- ms</span> 
+  </div>   
+ </body>
 </html>
