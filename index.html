@@ -6,6 +6,7 @@
     <title>DatXY</title>
     <link rel="shortcut icon" href="https://github.githubassets.com/favicons/favicon.svg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
         .container {
             max-width: 100%;
@@ -70,6 +71,22 @@
         }
         .delete-btn:hover {
             background-color: #ff1a1a; /* Darker red on hover */
+        }
+
+        /* Hide Hyperlink and Action columns on mobile */
+        @media screen and (max-width: 767px) {
+            #myTable th:nth-child(4), /* Hyperlink column */
+            #myTable td:nth-child(4),
+            #myTable th:nth-child(5), /* Action column */
+            #myTable td:nth-child(5) {
+                display: none;
+            }
+
+            /* Hide specific buttons */
+            .btn {
+                display: none;
+            }
+    
         }
     </style>
     <script>
@@ -172,9 +189,8 @@
             filterTable();
         }
 
-      
-
-        function addRow() {
+// Add a new row to the table
+function addRow() {
     var table = document.getElementById("myTable");
     var row = table.insertRow(-1); // Insert at the end of the table
 
@@ -182,25 +198,33 @@
     var year = prompt("Enter Year:");
     var dataType = prompt("Enter Data Type:");
     var capacity = prompt("Enter Domain (x.com):");
-    var hyperlink = prompt("Enter HHyperlink (https://x.com):");
+    var hyperlink = prompt("Enter Hyperlink (https://x.com):");
 
     // Ask if the user wants to add a hyperlink for the name
     var addLink = confirm("Do you want to add a hyperlink for the name?");
     var nameCell = addLink && hyperlink ? `<a target="_blank" href="${hyperlink}">${name}</a>` : name;
+
+    // For Hyperlink column: if there's a hyperlink, make the text a clickable link
+    var displayText = capacity || 'N/A'; // Default to 'N/A' if nothing is entered
+
+    // If hyperlink is provided, wrap the text in an <a> tag to make it clickable
+    var displayContent = hyperlink ? `<a target="_blank" href="${hyperlink}">${displayText}</a>` : displayText;
 
     row.innerHTML = `
         <td>${nameCell}</td>
         <td>${year}</td>
         <td>${dataType}</td>
         <td contenteditable="true" onblur="updateLink(this.parentNode, 3)">
-            ${hyperlink ? `<a target="_blank" href="${hyperlink}">${hyperlink}</a>` : 'N/A'}
+            ${displayContent}
         </td>
         <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
     `;
 
-    // Ensure the link is properly updated
-    updateLink(row, 3);
+    // Save the current table data to localStorage
+    saveTableToLocalStorage();
 }
+
+// Update the hyperlink in the table when the user edits the cell
 function updateLink(row, cellIndex) {
     var cell = row.cells[cellIndex];
     var url = cell.innerText.trim();
@@ -212,79 +236,100 @@ function updateLink(row, cellIndex) {
         // If the text is not a valid URL, leave it as plain text or 'N/A'
         cell.innerHTML = url || 'N/A';
     }
+
+    // After updating the link, save the table to localStorage again
+    saveTableToLocalStorage();
+}
+
+// Delete a row
+function deleteRow(btn) {
+    var row = btn.parentNode.parentNode;
+    row.parentNode.removeChild(row);
+
+    // After deleting the row, save the updated table to localStorage
+    saveTableToLocalStorage();
+}
+
+// Save the current table data to localStorage
+function saveTableToLocalStorage() {
+    var table = document.getElementById("myTable");
+    var rows = table.getElementsByTagName("tr");
+    var tableData = [];
+
+    for (var i = 1; i < rows.length; i++) { // Skip the header row
+        var row = rows[i];
+        var rowData = [];
+
+        for (var j = 0; j < row.cells.length - 1; j++) { // Skip the last cell (Action)
+            var cell = row.cells[j];
+            rowData.push(cell.innerHTML);
+        }
+
+        tableData.push(rowData);
+    }
+
+    // Save table data to localStorage
+    localStorage.setItem('tableData', JSON.stringify(tableData));
+}
+
+// Load the table data from localStorage
+function loadTableFromLocalStorage() {
+    var tableData = localStorage.getItem('tableData');
+    if (tableData) {
+        tableData = JSON.parse(tableData);
+        var table = document.getElementById("myTable");
+
+        tableData.forEach(function(rowData) {
+            var row = table.insertRow(-1);
+            rowData.forEach(function(cellData) {
+                var cell = row.insertCell();
+                cell.innerHTML = cellData;
+            });
+            var deleteCell = row.insertCell();
+            deleteCell.innerHTML = `<button class="delete-btn" onclick="deleteRow(this)">Delete</button>`;
+        });
+    }
+}
+
+// Call this function when the page loads to restore table data
+window.onload = function() {
+    loadTableFromLocalStorage();
+};
+
+// Update the link if user modifies the hyperlink column
+function updateLink(row, cellIndex) {
+    var cell = row.cells[cellIndex];
+    var text = cell.innerText.trim();
+
+    // Check if the content is a valid URL and if so, update the cell to be a hyperlink
+    if (text && (text.startsWith('http://') || text.startsWith('https://'))) {
+        cell.innerHTML = `<a target="_blank" href="${text}">${text}</a>`;
+    } else {
+        cell.innerHTML = text || 'N/A';
+    }
 }
 
 
-        function downloadXLSX() {
-            var table = document.getElementById("myTable");
-            var workbook = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });
-            var ws = workbook.Sheets["Sheet1"];
 
-            // Loop through the table to set hyperlinks, excluding the last action column
-            for (var i = 1; i < table.rows.length; i++) {
-                var row = table.rows[i];
-                for (var j = 0; j < row.cells.length - 1; j++) { // Exclude last cell (Action)
-                    var cell = row.cells[j];
-                    if (cell.firstChild && cell.firstChild.tagName === 'A') {
-                        var link = cell.firstChild.href;
-                        var cellAddress = XLSX.utils.encode_cell({ c: j, r: i - 1 });
-                        ws[cellAddress].l = { Target: link, Tooltip: cell.firstChild.innerText };
-                    }
-                }
+
+
+        function updateLink(row, cellIndex) {
+            var cell = row.cells[cellIndex];
+            var url = cell.innerText.trim();
+
+            // Check if the content is a valid URL
+            if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+                cell.innerHTML = `<a target="_blank" href="${url}">${url}</a>`;
+            } else {
+                // If the text is not a valid URL, leave it as plain text or 'N/A'
+                cell.innerHTML = url || 'N/A';
             }
-
-            XLSX.writeFile(workbook, "data.xlsx");
         }
-
 
         function deleteRow(btn) {
             var row = btn.parentNode.parentNode;
             row.parentNode.removeChild(row);
         }
-
-        function saveData() {
-    var table = document.getElementById("myTable");
-    var data = [];
-    for (var i = 1, row; row = table.rows[i]; i++) {
-        var rowData = {
-            name: row.cells[0].innerText,
-            year: row.cells[1].innerText,
-            dataType: row.cells[2].innerText,
-            capacity: row.cells[3].innerText, // Ensure editable data is captured
-            downloadLink: row.cells[4].innerText === 'N/A' ? '' : row.cells[4].firstChild.href
-        };
-        data.push(rowData);
-    }
-    localStorage.setItem('tableData', JSON.stringify(data));
-    alert("Data saved successfully!");
-}
-
-
-        function loadData() {
-    var data = JSON.parse(localStorage.getItem('tableData'));
-    if (data) {
-        var table = document.getElementById("myTable");
-        // Clear existing rows except the header
-        for (var i = table.rows.length - 1; i > 0; i--) {
-            table.deleteRow(i);
-        }
-        data.forEach(function(item) {
-            var row = table.insertRow(-1);
-            row.innerHTML = `
-                <td>${item.downloadLink ? `<a target="_blank" href="${item.downloadLink}">${item.name}</a>` : item.name}</td>
-                <td>${item.year}</td>
-                <td>${item.dataType}</td>
-                <td contenteditable="true" onblur="updateLink(this.parentNode, 3)">${item.downloadLink || 'N/A'}</td>
-                <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
-            `;
-            // Add contenteditable to any necessary columns (e.g., Hyperlink column)
-            row.cells[3].setAttribute("contenteditable", "true");
-        });
-    } else {
-        alert("No saved data found.");
-    }
-}
-
 
         function downloadPage() {
             const link = document.createElement('a');
@@ -295,41 +340,91 @@ function updateLink(row, cellIndex) {
             document.body.removeChild(link);
         }
 
-      
-        
+        function downloadXLSX() {
+    var table = document.getElementById("myTable");
+    var workbook = XLSX.utils.book_new();
+    var wsData = [];
+
+    // Extract the header row
+    var headers = [];
+    var headerCells = table.getElementsByTagName("th");
+    for (var i = 0; i < headerCells.length; i++) {
+        headers.push(headerCells[i].innerText);
+    }
+    wsData.push(headers); // Add headers as the first row
+
+    // Extract the data rows
+    var rows = table.getElementsByTagName("tr");
+    for (var i = 1; i < rows.length; i++) { // Skip the first row (header)
+        var row = rows[i];
+        var rowData = [];
+        var cells = row.getElementsByTagName("td");
+
+        for (var j = 0; j < cells.length - 1; j++) { // Exclude the last cell (Action button)
+            var cell = cells[j];
+            // Check if the cell contains a link
+            if (cell.firstChild && cell.firstChild.tagName === 'A') {
+                // If it's a link, store the text content
+                rowData.push(cell.firstChild.innerText); // Use innerText of the link (not HTML)
+            } else {
+                rowData.push(cell.innerText || cell.textContent); // Regular text content
+            }
+        }
+
+        wsData.push(rowData); // Add the data row
+    }
+
+    // Create a worksheet from the data
+    var ws = XLSX.utils.aoa_to_sheet(wsData);
+
+    // Add the worksheet to the workbook
+    XLSX.utils.book_append_sheet(workbook, ws, "Sheet1");
+
+    // Write the XLSX file
+    XLSX.writeFile(workbook, "data.xlsx");
+}
+
+
+
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
+
 </head>
 <body onload="sortDefault()">
-<div class="container">
-    <div class="input-container">
-        <input type="text" id="filterInput" onkeyup="filterTable()" placeholder="Search for Data..">
-        <button class="clear-btn" onclick="clearInput()">✕</button>
-        <button class="btn" onclick="startSpeechRecognition()"><i class="fas fa-microphone icon"></i></button>
-        <button class="btn" onclick="window.open('https://github.com/feeday/feeday.github.io/issues/4', '_blank')"><i class="fas fa-info-circle icon"></i></button>
-        <button class="btn" onclick="window.open('https://github.com/feeday/DatXY')"><i class="fas fa-cog"></i></button>
-        <button class="btn" onclick="addRow()"><i class="fas fa-plus icon"></i></button>
-        <button class="btn" onclick="downloadPage()"><i class="fas fa-download icon"></i></button>
-        <button class="btn" onclick="downloadXLSX()"><i class="fas fa-file-excel icon"></i></button>
-    </div>
+    <div class="container">
+        <div class="input-container">
+            <input type="text" id="filterInput" onkeyup="filterTable()" placeholder="Search for Data..">
+            <button class="clear-btn" onclick="clearInput()">✕</button>
+            <button class="btn" onclick="startSpeechRecognition()"><i class="fas fa-microphone icon"></i></button>
+            <button class="btn" onclick="window.open('https://github.com/feeday/feeday.github.io/issues/4', '_blank')"><i class="fas fa-info-circle icon"></i></button>
+            <button class="btn" onclick="window.open('https://github.com/feeday/DatXY')"><i class="fas fa-cog"></i></button>
+            <button class="btn" onclick="addRow()"><i class="fas fa-plus icon"></i></button>
+            
+            <button class="btn" onclick="downloadPage()"><i class="fas fa-download icon"></i></button>
+            <button class="btn" onclick="downloadXLSX()"><i class="fas fa-file-excel icon"></i></button>
+        </div>
 
-    <table id="myTable">
-        <tr>
-            <th onclick="sortTable(0)">Name</th>
-            <th onclick="sortTable(1)">Year</th>
-            <th onclick="sortTable(2)">Data type</th>
-            <th onclick="sortTable(3)">Hyperlink</th>
-            <th>Action</th>
-        </tr>
-        <tr>
-            <td><a target="_blank" href="https://github.com/deepseek-ai/DeepSeek-R1">DeepSeek-R1</a></td>
-            <td><a>20250120</td>
-            <td><a>Code-LLM</td>
-            <td><a target="_blank" href="https://github.com/deepseek-ai/DeepSeek-R1">gituhub.com</a></td>
-            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
-        </tr>
-    </table>
-</div> <div style="text-align:center;height:10px;">
+        <table id="myTable">
+            <tr>
+                <th onclick="sortTable(0)">Name</th>
+                <th onclick="sortTable(1)">Year</th>
+                <th onclick="sortTable(2)">Data type</th>
+                <th onclick="sortTable(3)">Hyperlink</th>
+                <th>Action</th>
+            </tr>
+            <tr>
+                <td><a target="_blank" href="https://github.com/deepseek-ai/DeepSeek-R1">DeepSeek-R1</a></td>
+                <td>20250120</td>
+                <td>Code-LLM</td>
+                <td><a target="_blank" href="https://github.com/deepseek-ai/DeepSeek-R1">https://github.com</a></td>
+                <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+            </tr>
+        </table>
+  
+    
+    
+    
+    <div style="text-align:center;height:10px;">
 </div>
 
   	<div style="display: flex; justify-content: center; align-items: center;">
