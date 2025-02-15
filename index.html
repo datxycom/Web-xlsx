@@ -306,10 +306,9 @@ function updateLink(row, cellIndex) {
         <input type="text" id="filterInput" onkeyup="filterTable()" placeholder="Search for Data..">
         <button class="clear-btn" onclick="clearInput()">✕</button>
         <button class="btn" onclick="startSpeechRecognition()"><i class="fas fa-microphone icon"></i></button>
-        <button class="btn" onclick="window.open('https://github.com/feeday/feeday.github.io/issues', '_blank')"><i class="fas fa-info-circle icon"></i></button>
-        <button class="btn" onclick="window.open('https://github.com/feeday/datxyz')"><i class="fas fa-cog"></i></button>
+        <button class="btn" onclick="window.open('https://github.com/feeday/feeday.github.io/issues/4', '_blank')"><i class="fas fa-info-circle icon"></i></button>
+        <button class="btn" onclick="window.open('https://github.com/feeday/DatXY')"><i class="fas fa-cog"></i></button>
         <button class="btn" onclick="addRow()"><i class="fas fa-plus icon"></i></button>
-        <button class="btn" onclick="saveData()"><i class="fas fa-save icon"></i></button>
         <button class="btn" onclick="downloadPage()"><i class="fas fa-download icon"></i></button>
         <button class="btn" onclick="downloadXLSX()"><i class="fas fa-file-excel icon"></i></button>
     </div>
@@ -323,13 +322,27 @@ function updateLink(row, cellIndex) {
             <th>Action</th>
         </tr>
         <tr>
-            <td><a>DeepSeek-R1</a></td>
+            <td><a target="_blank" href="https://github.com/deepseek-ai/DeepSeek-R1">DeepSeek-R1</a></td>
             <td><a>20250120</td>
             <td><a>Code-LLM</td>
-            <td><a target="_blank" title="b6fy" href="https://github.com/deepseek-ai/DeepSeek-R1">gituhub.com</a></td>
+            <td><a target="_blank" href="https://github.com/deepseek-ai/DeepSeek-R1">gituhub.com</a></td>
             <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
         </tr>
     </table>
+</div> <div style="text-align:center;height:10px;">
+</div>
+
+  	<div style="display: flex; justify-content: center; align-items: center;">
+         <script>
+        window.addEventListener('load', function() {
+            // 计算页面加载完成时间
+            const loadTime = performance.now();
+            // 显示加载时间
+            document.getElementById('performance-result').textContent = `页面加载: ${loadTime.toFixed(2)} ms`;
+        });
+    </script>
+<span id="delay" style="box-sizing: border-box; margin: 0; padding: 5px 10px; font-size: 12px; line-height: 1.71428em; color: #999; display: inline-block; text-align: center; border: 1px solid #ccc; border-left: none;"><script id="LA-DATA-WIDGET" crossorigin="anonymous" charset="UTF-8" src="https://v6-widget.51.la/v6/JRHGRBPWC7lJIaXq/quote.js?theme=0&f=12&display=0,0,1,1,0,0,0,0"></script></span>
+<span id="performance-result" style="box-sizing: border-box; margin: 0; padding: 5px 10px; font-size: 12px; line-height: 1.71428em; color: #999; display: inline-block; text-align: center; border: 1px solid #ccc; border-right: none;">页面加载完成时间: -- ms</span>
 </div>
 </body>
 </html>
