@@ -1,4 +1,6 @@
-<html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, viewport-fit=cover">
     <title>DatXY</title>
@@ -187,7 +189,8 @@
             filterTable();
         }
 
-        function addRow() {
+// Add a new row to the table
+function addRow() {
     var table = document.getElementById("myTable");
     var row = table.insertRow(-1); // Insert at the end of the table
 
@@ -211,14 +214,15 @@
         <td>${nameCell}</td>
         <td>${year}</td>
         <td>${dataType}</td>
-        <td>${displayContent}</td> <!-- Don't add contenteditable or onblur here -->
+        <td contenteditable="true" onblur="updateLink(this.parentNode, 3)">
+            ${displayContent}
+        </td>
         <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
     `;
 
     // Save the current table data to localStorage
     saveTableToLocalStorage();
 }
-
 
 // Update the hyperlink in the table when the user edits the cell
 function updateLink(row, cellIndex) {
@@ -395,12 +399,13 @@ function updateLink(row, cellIndex) {
             <button class="btn" onclick="window.open('https://github.com/feeday/feeday.github.io/issues/4', '_blank')"><i class="fas fa-info-circle icon"></i></button>
             <button class="btn" onclick="window.open('https://github.com/feeday/DatXY')"><i class="fas fa-cog"></i></button>
             <button class="btn" onclick="addRow()"><i class="fas fa-plus icon"></i></button>
+            
             <button class="btn" onclick="downloadPage()"><i class="fas fa-download icon"></i></button>
             <button class="btn" onclick="downloadXLSX()"><i class="fas fa-file-excel icon"></i></button>
         </div>
 
         <table id="myTable">
-            <tbody><tr>
+            <tr>
                 <th onclick="sortTable(0)">Name</th>
                 <th onclick="sortTable(1)">Year</th>
                 <th onclick="sortTable(2)">Data type</th>
@@ -409,31 +414,12 @@ function updateLink(row, cellIndex) {
             </tr>
             <tr>
                 <td><a target="_blank" href="https://github.com/deepseek-ai/DeepSeek-R1">DeepSeek-R1</a></td>
-                <td>202501</td>
-                <td>Code-Github-LLM</td>
+                <td>20250120</td>
+                <td>Code-LLM</td>
                 <td><a target="_blank" href="https://github.com/deepseek-ai/DeepSeek-R1">https://github.com</a></td>
                 <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
             </tr>
-     </tbody></table>
-  
-    
-    
-    
-    <div style="text-align:center;height:10px;">
-</div>
-
-  	<div style="display: flex; justify-content: center; align-items: center;">
-         <script>
-        window.addEventListener('load', function() {
-            // 计算页面加载完成时间
-            const loadTime = performance.now();
-            // 显示加载时间
-            document.getElementById('performance-result').textContent = `页面加载: ${loadTime.toFixed(2)} ms`;
-        });
-    </script>
-<span id="delay" style="box-sizing: border-box; margin: 0; padding: 5px 10px; font-size: 12px; line-height: 1.71428em; color: #999; display: inline-block; text-align: center; border: 1px solid #ccc; border-left: none;"><script id="LA-DATA-WIDGET" crossorigin="anonymous" charset="UTF-8" src="https://v6-widget.51.la/v6/JRHGRBPWC7lJIaXq/quote.js?theme=0&amp;f=12&amp;display=0,0,1,1,0,0,0,0"></script><span class="la-widget la-data-widget__container" style="box-sizing: border-box !important; margin: 0px !important; font-size: 12px !important; line-height: 1.71428em !important; color: rgb(51, 51, 51) !important;"><span style="box-sizing: border-box !important; margin: 0px !important; font-size: 12px !important; line-height: 1.71428em !important; color: rgb(51, 51, 51) !important; border-left: none !important; padding-left: 0px !important;"><span style="box-sizing: border-box !important; margin: 0px !important; font-size: 12px !important; line-height: 1.71428em !important; color: rgb(153, 153, 153) !important; display: inline-block !important;">今日访问人数</span><span style="box-sizing: border-box !important; margin: 0px 0px 0px 6px !important; font-size: 12px !important; line-height: 1.71428em !important; color: rgb(51, 51, 51) !important; font-weight: bold !important;">1</span></span><span style="box-sizing: border-box !important; margin: 0px 0px 0px 6px !important; font-size: 12px !important; line-height: 1.71428em !important; color: rgb(51, 51, 51) !important; border-left: 1px solid rgb(22, 144, 255) !important; padding-left: 6px !important;"><span style="box-sizing: border-box !important; margin: 0px !important; font-size: 12px !important; line-height: 1.71428em !important; color: rgb(153, 153, 153) !important; display: inline-block !important;">今日访问量</span><span style="box-sizing: border-box !important; margin: 0px 0px 0px 6px !important; font-size: 12px !important; line-height: 1.71428em !important; color: rgb(51, 51, 51) !important; font-weight: bold !important;">3</span></span></span></span>
-<span id="performance-result" style="box-sizing: border-box; margin: 0; padding: 5px 10px; font-size: 12px; line-height: 1.71428em; color: #999; display: inline-block; text-align: center; border: 1px solid #ccc; border-right: none;">页面加载: 1462.90 ms</span>
-</div>
-
-
-</div></body></html>
+        </table>
+    </div>
+</body>
+</html>
