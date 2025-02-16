@@ -431,22 +431,27 @@ function handleFileUpload(event) {
             jsonData.forEach(function(rowData) {
                 var name = rowData.Name || 'N/A';
                 var hyperlink = rowData.Hyperlink || 'N/A';
+                var year = rowData.Year || 'N/A';
+                var dataType = rowData['Data type'] || 'N/A';
 
-                var table = document.getElementById("myTable");
-                var row = table.insertRow(-1); // Insert at the end of the table
-                
-                var nameCell = `<a target="_blank" href="${hyperlink}">${name}</a>`;
-                var displayContent = hyperlink ? `<a target="_blank" href="${hyperlink}">${hyperlink}</a>` : 'N/A';
+                // Check if the row is a duplicate
+                if (!isRowDuplicate(name, hyperlink, year, dataType)) {
+                    var table = document.getElementById("myTable");
+                    var row = table.insertRow(-1); // Insert at the end of the table
 
-                row.innerHTML = `
-                    <td>${nameCell}</td>
-                    <td>${rowData.Year || 'N/A'}</td>
-                    <td>${rowData['Data type'] || 'N/A'}</td>
-                    <td contenteditable="true" onblur="updateLink(this.parentNode, 3)">
-                        ${displayContent}
-                    </td>
-                    <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
-                `;
+                    var nameCell = `<a target="_blank" href="${hyperlink}">${name}</a>`;
+                    var displayContent = hyperlink ? `<a target="_blank" href="${hyperlink}">${hyperlink}</a>` : 'N/A';
+
+                    row.innerHTML = `
+                        <td>${nameCell}</td>
+                        <td>${year}</td>
+                        <td>${dataType}</td>
+                        <td contenteditable="true" onblur="updateLink(this.parentNode, 3)">
+                            ${displayContent}
+                        </td>
+                        <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                    `;
+                }
             });
         };
         reader.readAsArrayBuffer(file);
@@ -455,7 +460,27 @@ function handleFileUpload(event) {
     }
 }
 
-// Remove isRowDuplicate function since it's no longer needed
+// Check if the row already exists based on all columns (Name, Hyperlink, Year, Data type)
+function isRowDuplicate(name, hyperlink, year, dataType) {
+    var table = document.getElementById("myTable");
+    var rows = table.getElementsByTagName("tr");
+
+    for (var i = 1; i < rows.length; i++) { // Skip the header row
+        var cells = rows[i].getElementsByTagName("td");
+
+        // Compare each column (Name, Hyperlink, Year, Data type)
+        var existingName = cells[0].textContent.trim();
+        var existingHyperlink = cells[3].textContent.trim();
+        var existingYear = cells[1].textContent.trim();
+        var existingDataType = cells[2].textContent.trim();
+
+        // If any column differs, it's not a duplicate
+        if (existingName === name && existingHyperlink === hyperlink && existingYear === year && existingDataType === dataType) {
+            return true; // Row is a duplicate
+        }
+    }
+    return false; // Row is not a duplicate
+}
 
 
 
