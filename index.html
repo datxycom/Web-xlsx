@@ -91,7 +91,7 @@
         /* Hide specific buttons on mobile */
 /* 在手机上确保显示这两个按钮 */
 @media screen and (max-width: 767px) {
-    .add-row-btn, .download-page-btn {
+    .add-row-btn, .download-xlsx-btn {
         display: inline-block; /* 确保按钮显示为内联块元素 */
     }
 }
@@ -427,8 +427,8 @@ function updateLink(row, cellIndex) {
     <button class="btn" onclick="window.open('https://github.com/feeday/feeday.github.io/issues/4', '_blank')"><i class="fas fa-info-circle icon"></i></button> 
     <button class="btn" onclick="window.open('https://github.com/feeday/DatXY')"><i class="fas fa-cog"></i></button> 
     <button class="btn add-row-btn" onclick="addRow()"><i class="fas fa-plus icon"></i></button>
-<button class="btn download-page-btn" onclick="downloadPage()"><i class="fas fa-download icon"></i></button>
-<button class="btn" onclick="downloadXLSX()"><i class="fas fa-file-excel icon"></i></button> 
+<button class="btn" onclick="downloadPage()"><i class="fas fa-download icon"></i></button>
+<button class="btn download-xlsx-btn" onclick="downloadXLSX()"><i class="fas fa-file-excel icon"></i></button> 
 
    </div> 
    <table id="myTable"> 
