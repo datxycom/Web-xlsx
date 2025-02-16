@@ -432,24 +432,21 @@ function handleFileUpload(event) {
                 var name = rowData.Name || 'N/A';
                 var hyperlink = rowData.Hyperlink || 'N/A';
 
-                // Check if the row already exists by matching the Name or Hyperlink
-                if (!isRowDuplicate(name, hyperlink)) {
-                    var table = document.getElementById("myTable");
-                    var row = table.insertRow(-1); // Insert at the end of the table
-                    
-                    var nameCell = `<a target="_blank" href="${hyperlink}">${name}</a>`;
-                    var displayContent = hyperlink ? `<a target="_blank" href="${hyperlink}">${hyperlink}</a>` : 'N/A';
+                var table = document.getElementById("myTable");
+                var row = table.insertRow(-1); // Insert at the end of the table
+                
+                var nameCell = `<a target="_blank" href="${hyperlink}">${name}</a>`;
+                var displayContent = hyperlink ? `<a target="_blank" href="${hyperlink}">${hyperlink}</a>` : 'N/A';
 
-                    row.innerHTML = `
-                        <td>${nameCell}</td>
-                        <td>${rowData.Year || 'N/A'}</td>
-                        <td>${rowData['Data type'] || 'N/A'}</td>
-                        <td contenteditable="true" onblur="updateLink(this.parentNode, 3)">
-                            ${displayContent}
-                        </td>
-                        <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
-                    `;
-                }
+                row.innerHTML = `
+                    <td>${nameCell}</td>
+                    <td>${rowData.Year || 'N/A'}</td>
+                    <td>${rowData['Data type'] || 'N/A'}</td>
+                    <td contenteditable="true" onblur="updateLink(this.parentNode, 3)">
+                        ${displayContent}
+                    </td>
+                    <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                `;
             });
         };
         reader.readAsArrayBuffer(file);
@@ -458,23 +455,7 @@ function handleFileUpload(event) {
     }
 }
 
-// Check if the row already exists based on Name or Hyperlink
-function isRowDuplicate(name, hyperlink) {
-    var table = document.getElementById("myTable");
-    var rows = table.getElementsByTagName("tr");
-
-    for (var i = 1; i < rows.length; i++) { // Skip the header row
-        var cells = rows[i].getElementsByTagName("td");
-        var existingName = cells[0].textContent.trim();
-        var existingHyperlink = cells[3].textContent.trim();
-
-        // Compare the Name and Hyperlink to determine if the row is a duplicate
-        if (existingName === name && existingHyperlink === hyperlink) {
-            return true; // Row is a duplicate
-        }
-    }
-    return false; // Row is not a duplicate
-}
+// Remove isRowDuplicate function since it's no longer needed
 
 
 
@@ -490,7 +471,7 @@ function isRowDuplicate(name, hyperlink) {
 
 
 
-    <button class="btn" title="upload xlsx"  onclick="document.getElementById('file-input').click()">
+    <button class="btn add add-xlsx-btn" title="upload xlsx"  onclick="document.getElementById('file-input').click()">
         <i class="fas fa-plus icon"></i> 
     </button>
     <input type="file" id="file-input" style="display: none;" accept=".xlsx" onchange="handleFileUpload(event)" />
@@ -499,11 +480,6 @@ function isRowDuplicate(name, hyperlink) {
     <button class="btn download-xlsx-btn" title="download xlsx" onclick="downloadXLSX()">
         <i class="fa fa-download"></i>
       </button>
-      
-
-
-
-
 
     <button class="btn" title="download html"  onclick="downloadPage()"><i class="fab fa-chrome"></i></button>
     <button class="btn" title="DatXY Project"onclick="window.open('https://github.com/feeday/DatXY')"><i class="fas fa-cog"></i></button> 
