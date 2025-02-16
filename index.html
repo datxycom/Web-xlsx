@@ -466,17 +466,17 @@ function handleFileUpload(event) {
     <input type="text" id="filterInput" onkeyup="filterTable()" placeholder="Search for Data.." /> 
     <button class="clear-btn" onclick="clearInput()">✕</button> 
     <button class="btn" onclick="startSpeechRecognition()"><i class="fas fa-microphone icon"></i></button> 
-    <button class="btn " onclick="addRow()"><i class="fas fa-plus icon"></i></button>
-    <button class="btn add-xlsx-btn" onclick="document.getElementById('file-input').click()">
+    <button class="btn" title="add data"  onclick="addRow()"><i class="fas fa-plus icon"></i></button>
+    <button class="btn add-xlsx-btn" title="upload xlsx"  onclick="document.getElementById('file-input').click()">
         <i class="fas fa-upload"></i> 
     </button>
     <input type="file" id="file-input" style="display: none;" accept=".xlsx" onchange="handleFileUpload(event)" />
-    <button class="btn download-xlsx-btn" onclick="downloadXLSX()"><i class="fa fa-download"></i></button> 
+    <button class="btn download-xlsx-btn" title="download xlsx"  onclick="downloadXLSX()"><i class="fa fa-download"></i></button> 
 <button class="btn" title="download add xlsx"  onclick="window.open('https://datxy.com/add.xlsx', '_blank')">
   <i class="fas fa-file-excel icon"></i>
 </button>
-    <button class="btn" onclick="downloadPage()"><i class="fab fa-chrome"></i></button>
-    <button class="btn" onclick="window.open('https://github.com/feeday/DatXY')"><i class="fas fa-cog"></i></button> 
+    <button class="btn" title="download html"  onclick="downloadPage()"><i class="fab fa-chrome"></i></button>
+    <button class="btn" title="DatXY Project"onclick="window.open('https://github.com/feeday/DatXY')"><i class="fas fa-cog"></i></button> 
 
 
 
