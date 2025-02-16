@@ -95,6 +95,27 @@
         display: inline-block; /* 确保按钮显示为内联块元素 */
     }
 }
+/* 为表格单元格设置换行 */
+td {
+    word-wrap: break-word;  /* 允许单元格内容换行 */
+    overflow-wrap: break-word;  /* 兼容性增强 */
+}
+
+/* 针对手机屏幕缩小字体大小 */
+@media screen and (max-width: 767px) {
+    table {
+        font-size: 12px;  /* 当屏幕宽度小于767px时，缩小字体 */
+    }
+    td, th {
+        padding: 5px;  /* 调整单元格内边距以节省空间 */
+    }
+    #filterInput {
+        font-size: 14px; /* 搜索框字体大小调整 */
+    }
+    .btn, .clear-btn {
+        font-size: 14px;  /* 按钮字体调整 */
+    }
+}
 
     </style> 
   <script>
