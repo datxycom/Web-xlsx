@@ -91,7 +91,7 @@
         /* Hide specific buttons on mobile */
 /* 在手机上确保显示这两个按钮 */
 @media screen and (max-width: 767px) {
-    .add-row-btn, .download-xlsx-btn {
+    .add-xlsx-btn, .download-xlsx-btn {
         display: inline-block; /* 确保按钮显示为内联块元素 */
     }
 }
@@ -414,6 +414,47 @@ function updateLink(row, cellIndex) {
 }
 
 
+function handleFileUpload(event) {
+    var file = event.target.files[0];
+    if (file && file.name.endsWith('.xlsx')) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var data = new Uint8Array(e.target.result);
+            var workbook = XLSX.read(data, { type: 'array' });
+
+            // Get the first sheet
+            var sheetName = workbook.SheetNames[0];
+            var worksheet = workbook.Sheets[sheetName];
+            var jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+            // Add data to the table
+            jsonData.forEach(function(rowData) {
+                var table = document.getElementById("myTable");
+                var row = table.insertRow(-1); // Insert at the end of the table
+                var name = rowData.Name || 'N/A';
+                var year = rowData.Year || 'N/A';
+                var dataType = rowData['Data type'] || 'N/A';
+                var hyperlink = rowData.Hyperlink || 'N/A';
+
+                var nameCell = `<a target="_blank" href="${hyperlink}">${name}</a>`;
+                var displayContent = hyperlink ? `<a target="_blank" href="${hyperlink}">${hyperlink}</a>` : 'N/A';
+
+                row.innerHTML = `
+                    <td>${nameCell}</td>
+                    <td>${year}</td>
+                    <td>${dataType}</td>
+                    <td contenteditable="true" onblur="updateLink(this.parentNode, 3)">
+                        ${displayContent}
+                    </td>
+                    <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                `;
+            });
+        };
+        reader.readAsArrayBuffer(file);
+    } else {
+        alert('Please upload a valid XLSX file.');
+    }
+}
 
 
     </script> 
@@ -425,11 +466,18 @@ function updateLink(row, cellIndex) {
     <input type="text" id="filterInput" onkeyup="filterTable()" placeholder="Search for Data.." /> 
     <button class="clear-btn" onclick="clearInput()">✕</button> 
     <button class="btn" onclick="startSpeechRecognition()"><i class="fas fa-microphone icon"></i></button> 
-    <button class="btn add-row-btn" onclick="addRow()"><i class="fas fa-plus icon"></i></button>
-<button class="btn" onclick="downloadPage()"><i class="fas fa-download icon"></i></button>
+    <button class="btn " onclick="addRow()"><i class="fas fa-plus icon"></i></button>
+    <button class="btn add-xlsx-btn" onclick="document.getElementById('file-input').click()">
+        <i class="fas fa-upload"></i> 
+    </button>
+    <input type="file" id="file-input" style="display: none;" accept=".xlsx" onchange="handleFileUpload(event)" />
+    
+<button class="btn" onclick="downloadPage()"><i class="fab fa-chrome"></i></button>
 <button class="btn download-xlsx-btn" onclick="downloadXLSX()"><i class="fas fa-file-excel icon"></i></button> 
         <button class="btn" onclick="window.open('https://github.com/feeday/feeday.github.io/issues/4', '_blank')"><i class="fas fa-info-circle icon"></i></button> 
     <button class="btn" onclick="window.open('https://github.com/feeday/DatXY')"><i class="fas fa-cog"></i></button> 
+
+
 
    </div> 
    <table id="myTable"> 
@@ -455,6 +503,13 @@ function updateLink(row, cellIndex) {
       <td><a target="_blank" href="https://chat.scnet.cn">https://chat.scnet.cn</a></td> 
       <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td> 
      </tr>
+     <tr> 
+        <td><a target="_blank" href="https://chat.scnet.cn">Font Awesome 5</a></td> 
+        <td>201707</td> 
+        <td>Web-Image</td> 
+        <td><a target="_blank" href="https://www.w3schools.com/icons/icons_reference.asp">https://www.w3schools.com/icons/icons_reference.asp</a></td> 
+        <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td> 
+       </tr>
       <tr> 
       <td><a target="_blank" href="https://chatgpt.com/">ChatGPT</a></td> 
       <td>202303</td> 
