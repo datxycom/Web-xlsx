@@ -369,7 +369,7 @@ function updateLink(row, cellIndex) {
             document.body.removeChild(link);
         }
 
-        function downloadXLSX() {
+      function downloadXLSX() {
     var table = document.getElementById("myTable");
     var workbook = XLSX.utils.book_new();
     var wsData = [];
@@ -409,9 +409,10 @@ function updateLink(row, cellIndex) {
     // Add the worksheet to the workbook
     XLSX.utils.book_append_sheet(workbook, ws, "Sheet1");
 
-    // Write the XLSX file
+    // Write the XLSX file with the correct extension
     XLSX.writeFile(workbook, "data.xlsx");
 }
+
 
 
 
@@ -424,11 +425,11 @@ function updateLink(row, cellIndex) {
     <input type="text" id="filterInput" onkeyup="filterTable()" placeholder="Search for Data.." /> 
     <button class="clear-btn" onclick="clearInput()">✕</button> 
     <button class="btn" onclick="startSpeechRecognition()"><i class="fas fa-microphone icon"></i></button> 
-    <button class="btn" onclick="window.open('https://github.com/feeday/feeday.github.io/issues/4', '_blank')"><i class="fas fa-info-circle icon"></i></button> 
-    <button class="btn" onclick="window.open('https://github.com/feeday/DatXY')"><i class="fas fa-cog"></i></button> 
     <button class="btn add-row-btn" onclick="addRow()"><i class="fas fa-plus icon"></i></button>
 <button class="btn" onclick="downloadPage()"><i class="fas fa-download icon"></i></button>
 <button class="btn download-xlsx-btn" onclick="downloadXLSX()"><i class="fas fa-file-excel icon"></i></button> 
+        <button class="btn" onclick="window.open('https://github.com/feeday/feeday.github.io/issues/4', '_blank')"><i class="fas fa-info-circle icon"></i></button> 
+    <button class="btn" onclick="window.open('https://github.com/feeday/DatXY')"><i class="fas fa-cog"></i></button> 
 
    </div> 
    <table id="myTable"> 
