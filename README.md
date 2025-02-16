@@ -7,6 +7,6 @@
 - 支持添加的记录保存表格
 - 支持导入表格添加到网页
 - 调整小的宽度字体自适应
-
-## 建议反馈添加链接可以在此留言 [Issues](https://github.com/feeday/DatXY/issues)
+## 添加表格式： [Add xlsx](https://github.com/feeday/DatXY/blob/main/add.xlsx)
+## 建议添加链接： [Issues](https://github.com/feeday/DatXY/issues)
 最后更新于：20250216
